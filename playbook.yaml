@@ -37,3 +37,13 @@
       package:
         name: 'nomad-enterprise'
         state: present
+
+    - name: Install htop
+      package:
+        name: 'htop'
+        state: present
+
+    - name: Upgrade all packages
+      yum:
+        name: '*'
+        state: latest

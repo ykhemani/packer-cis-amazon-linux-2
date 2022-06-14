@@ -20,18 +20,18 @@ source "amazon-ebs" "cis-amazon-linux-2" {
 
   source_ami_filter {
     filters = {
-      virtualization-type = "hvm"
-      name                = "CIS Amazon Linux 2 Benchmark v2* - Level 2*"
-      root-device-type    = "ebs"
+      virtualization-type = var.source_ami_filter_virtualization_type
+      name                = var.source_ami_filter_name
+      root-device-type    = var.source_ami_filter_rooot_device_type
     }
-    owners      = ["679593333241"]
+    owners      = var.source_ami_owners
     most_recent = true
   }
-  communicator = "ssh"
-  ssh_username = "ec2-user"
+  communicator = var.amazon_communicator
+  ssh_username = var.amazon_ssh_username
 
   tags = {
-    Name           = "CIS Amazon Linux 2 Bechmark v2 - Level 2 - ${var.owner} {{timestamp}}"
+    Name           = "${var.amazon_image_name} - ${var.owner} {{timestamp}}"
     owner          = var.owner
     ttl            = var.ttl
     config-as-code = var.config-as-code
@@ -41,26 +41,24 @@ source "amazon-ebs" "cis-amazon-linux-2" {
 
 build {
   hcp_packer_registry {
-    bucket_name = "cis-amazon-linux-2"
-    description = <<EOT
-This image is based on CIS Amazon Linux 2 Benchmark - Level 2.
-EOT
+    bucket_name = var.bucket_name
+    description = var.bucket_description
   }
 
   sources = [
     "source.amazon-ebs.cis-amazon-linux-2"
   ]
 
-## via shell provisioner
-#  provisioner "shell" {
-#    execute_command = "{{.Vars}} bash '{{.Path}}'"
-#    inline = [
-#      "sudo yum update -y",
-#      "sudo yum install -y yum-utils",
-#      "sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo",
-#      "sudo yum -y install terraform vault-enterprise consul-enterprise nomad-enterprise packer consul-template"
-#    ]
-#  }
+  ## via shell provisioner
+  #  provisioner "shell" {
+  #    execute_command = "{{.Vars}} bash '{{.Path}}'"
+  #    inline = [
+  #      "sudo yum update -y",
+  #      "sudo yum install -y yum-utils",
+  #      "sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo",
+  #      "sudo yum -y install terraform vault-enterprise consul-enterprise nomad-enterprise packer consul-template"
+  #    ]
+  #  }
 
   provisioner "ansible" {
     playbook_file = "./playbook.yaml"

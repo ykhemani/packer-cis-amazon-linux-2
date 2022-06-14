@@ -1,3 +1,5 @@
-owner      = "yash"
-aws_region = "us-east-1"
-repo       = "ykhemani/packer-cis-amazon-linux-2-level-2"
+owner              = "yash"
+aws_region         = "us-east-1"
+repo               = "ykhemani/packer-cis-amazon-linux-2-level-2"
+bucket_name        = "cis-amazon-linux-2"
+bucket_description = "This image is based on CIS Amazon Linux 2 Benchmark - Level 2."
