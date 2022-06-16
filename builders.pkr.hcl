@@ -43,6 +43,14 @@ build {
   hcp_packer_registry {
     bucket_name = var.bucket_name
     description = var.bucket_description
+
+    bucket_labels = {
+      "os" = "linux"
+    }
+
+    build_labels = {
+      "build-time" = timestamp()
+    }
   }
 
   sources = [
