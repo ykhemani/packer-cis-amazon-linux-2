@@ -45,7 +45,8 @@ build {
     description = var.bucket_description
 
     bucket_labels = {
-      "os" = "linux"
+      "os"  = "linux"
+      "foo" = "bar"
     }
 
     build_labels = {
